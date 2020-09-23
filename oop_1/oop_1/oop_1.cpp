@@ -42,7 +42,6 @@ int main()
 		}
 		else if (option == 2)
 		{
-
 			cout << "-----------starting adding employee-----------" << endl;
 			cout << "Please enter the name" << endl;
 			string name;
@@ -63,15 +62,25 @@ int main()
 			emp.setDepartmentId(id);
 			company.addNewEmployee(emp);
 			cout << "-----------finished adding employee-----------" << endl;
-
 		}
 		else if (option == 3)
 		{
+			cout << "-----------starting changing employee's department-----------" << endl;
 			cout << "changing employee's department" << endl;
+			string name;
+			int newId;
+			cout << "Please enter the employee name" << endl;
+			cin >> name;
+			cout << "Please enter the new departemnt id" << endl;
+			cin >> newId;
+			company.changeEmployeesDepartment(name, newId);
+			cout << "-----------finished changing employee's department-----------" << endl;
 		}
 		else if (option == 4)
 		{
-			cout << "printing report" << endl;
+			cout << "-----------Report-----------" << endl;
+			company.printReport();
+			cout << "-----------Report End-----------" << endl;
 		}
 		else {
 			return 0;
