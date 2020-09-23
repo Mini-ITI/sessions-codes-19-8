@@ -39,7 +39,3 @@ int Employee::getDepartmentId()
 {
 	return departmentId;
 }
-
-Employee::Employee(string n, double s, int a, int id) : name(n), salary(s), age(a), departmentId(id)
-{
-}

@@ -1,4 +1,6 @@
-﻿  Employee.cpp
+﻿  Company.cpp
+  Department.cpp
+  Employee.cpp
   oop_1.cpp
   Generating Code...
   oop_1.vcxproj -> D:\Workspace\sessions-codes-19-8\oop_1\Debug\oop_1.exe

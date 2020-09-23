@@ -8,16 +8,15 @@ private:
 	double salary;
 	int age, departmentId;
 public:
-	void setName(string n);
 	void setSalary(double s);
 	void setAge(int a);
-	void setDepartmentId(int id);
 
+	void setName(string n);
 	string getName();
 	double getSalary();
 	int getAge();
+	void setDepartmentId(int id);
 	int getDepartmentId();
 
-	Employee(string n, double s, int a, int id);
 };
 
