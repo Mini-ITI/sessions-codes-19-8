@@ -41,6 +41,39 @@ void BST<T>::add(T value)
 	}
 }
 template<class T>
+bool BST<T>::find(T value)
+{
+	if (root == nullptr)
+		return false;
+	Node<T>* currentNode = root;
+	while (true)
+	{
+		if (currentNode->value < value)
+		{
+			if (currentNode->right == nullptr)
+			{
+				return false;
+			}
+			else {
+				currentNode = currentNode->right;
+			}
+		}
+		else if (currentNode->value > value)
+		{
+			if (currentNode->left == nullptr)
+			{
+				return false;
+			}
+			else {
+				currentNode = currentNode->left;
+			}
+		}
+		else {
+			return true;
+		}
+	}
+}
+template<class T>
 BST<T>::BST()
 {
 	root = nullptr;

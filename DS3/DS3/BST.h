@@ -9,6 +9,7 @@ private:
 	int size;
 public:
 	void add(T value);
+	bool find(T value);
 	BST();
 };
 
