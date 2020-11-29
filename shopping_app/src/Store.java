@@ -1,11 +1,73 @@
 import java.awt.*;
+import java.util.*;
 import java.util.List;
-import java.util.Scanner;
-import java.util.Vector;
+
+
+class Pair implements Comparable<Pair>{
+    public int first, second;
+
+    public Pair(int first, int second) {
+        this.first = first;
+        this.second = second;
+    }
+
+    @Override
+    public int compareTo(Pair o) {
+        if(this.first==o.first)
+            return 0;
+        else if(this.first>o.first)
+            return 1;
+        else
+            return -1;
+    }
+}
+
 
 public class Store {
     Admin admin;
     Vector<Customer>customers;
+    Vector<Vector<Pair>> city;
+
+    int isStoreHouse(int blockNumber){
+        Vector<StoreHouse> storeHouses  = admin.getStoreHouses();
+        for(int i = 0 ; i < storeHouses.size() ; i++){
+            if(storeHouses.elementAt(i).getBlockNumber() == blockNumber){
+                return storeHouses.elementAt(i).getId();
+            }
+        }
+
+        return -1;
+    }
+    int getNearestStoreHouseId(int customerBlockNumber){
+
+        PriorityQueue<Pair> pq = new PriorityQueue<>();
+        pq.add(new Pair(0, customerBlockNumber));
+        int[] length = new int[city.size()];
+        Arrays.fill(length, 1000000000);
+        length[customerBlockNumber] = 0;
+        while (pq.isEmpty() == false){
+            int currentBlockNumber = pq.peek().second;
+            int currentLength = pq.peek().first;
+            pq.remove();
+            if(currentLength != length[currentBlockNumber] )
+                continue;
+            int id = isStoreHouse(currentBlockNumber);
+            if(id != -1){
+                return id;
+            }
+
+            for(int i = 0 ; i < city.elementAt(currentBlockNumber).size() ; i++)
+            {
+                int child = city.elementAt(currentBlockNumber).elementAt(i).first;
+                int wChild = city.elementAt(currentBlockNumber).elementAt(i).second;
+                if(wChild + currentLength < length[child]){
+                    pq.add(new Pair(wChild + currentLength, child));
+                    length[child] = wChild + currentLength;
+                }
+            }
+        }
+        return -1;
+    }
 
     boolean findUserName(String username){
         for(int i = 0 ; i < customers.size() ; i++)
@@ -71,7 +133,7 @@ public class Store {
         String password = scan.next();
         boolean loggedIn = false;
         for(int i = 0 ; i < customers.size() ; i++){
-            if(customers.elementAt(i).equals(username)){
+            if(customers.elementAt(i).getUserName().equals(username)){
                 if(customers.elementAt(i).getPassword().equals(password)){
                     //logged in
                     loggedIn = true;
@@ -100,9 +162,25 @@ public class Store {
                                     cart.add(admin.getProducts().elementAt(index));
                                 }
                             }
-                            //customers.elementAt(i).
+
+                            customers.elementAt(i).addOrder(new Order(cart, getNearestStoreHouseId(customers.elementAt(i).getBlockNumber())));
                         }else if(option == 2){
-                            //show past orders
+                            Vector<Order>orders = customers.elementAt(i).getOrders();
+                            for(int j = 0 ; j < orders.size() ; j++)
+                            {
+                                System.out.print("This order has been delivered from the store house which id is ");
+                                System.out.println(orders.elementAt(j).getStoreHouseId());
+                                System.out.println("And its products are");
+                                Vector<Product> products = orders.elementAt(j).getProducts();
+                                for(int k = 0 ; k < products.size() ; k++)
+                                {
+                                    System.out.print(products.elementAt(k).getName());
+                                    System.out.print(" ");
+                                    System.out.print(products.elementAt(k).getPrice());
+                                }
+                                System.out.println();
+
+                            }
                         }else{
                             break;
                         }
@@ -136,8 +214,11 @@ public class Store {
         customers.add(newCustomer);
     }
 
-    public Store() {
-        admin = new Admin("admin", "admin123admin", new Vector<StoreHouse>());
+    public Store(Vector<StoreHouse> storeHouses, Vector<Vector<Pair>> city, Vector<Product> products) {
+        admin = new Admin("admin", "admin123admin", storeHouses);
+        for(int i = 0 ; i < products.size() ; i++)
+            admin.addProduct(products.elementAt(i));
         customers = new Vector<Customer>();
+        this.city = city;
     }
 }

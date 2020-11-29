@@ -1,9 +1,35 @@
 import java.util.Scanner;
+import java.util.Vector;
 
 public class MAIN {
     public static void main(String[] args) {
         Scanner scan = new Scanner(System.in);
-        Store store = new Store();
+
+        int numberOfStoreHouses = scan.nextInt();
+        Vector<StoreHouse> storeHouses = new Vector<>();
+        for(int i = 0 ; i < numberOfStoreHouses ; i++)
+            storeHouses.add(new StoreHouse(scan.nextInt()));
+
+        int nodes = scan.nextInt(), edges = scan.nextInt();
+        Vector<Vector<Pair>> city = new Vector<>();
+        for(int i = 0 ; i <= nodes ; i++)
+            city.add(new Vector<Pair>());
+
+        for(int i = 0 ; i < edges ; i++)
+        {
+            int u = scan.nextInt(), v = scan.nextInt(), w = scan.nextInt();
+            city.elementAt(u).add(new Pair(v, w));
+            city.elementAt(v).add(new Pair(u, w));
+        }
+
+        Vector<Product>products = new Vector<>();
+        int nProducts = scan.nextInt();
+        for(int i = 0 ; i < nProducts ; i++)
+        {
+            products.add(new Product(scan.next(), scan.nextDouble()));
+        }
+
+        Store store = new Store(storeHouses, city, products);
         while (true){
             System.out.println("To Login type 1");
             System.out.println("To Register type 2");
